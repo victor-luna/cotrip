@@ -12,6 +12,7 @@ public class UserModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private UUID id;
     @Column(nullable = false, unique = true, length = 16)
     private String CPF;
