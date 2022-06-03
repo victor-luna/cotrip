@@ -1,5 +1,6 @@
 package com.api.cotrip.models;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,8 +11,9 @@ import java.util.UUID;
 public class DestinoModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "id")
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private UUID id;
     @Column(nullable = false, length = 100)
     private String origem;
@@ -27,9 +29,13 @@ public class DestinoModel implements Serializable{
     private String valorArrecadado;
     @Column(nullable = false, length = 40)
     private String opcoesDeDestino;
-
     @Column(nullable = false)
     private LocalDateTime dataDeRegistro;
+
+
+
+    @ManyToOne
+    private DestinoModel destino_id;
 
     public UUID getId() {
         return id;
@@ -101,6 +107,14 @@ public class DestinoModel implements Serializable{
 
     public void setDataDeRegistro(LocalDateTime dataDeRegistro) {
         this.dataDeRegistro = dataDeRegistro;
+    }
+
+    public DestinoModel getDestino_id() {
+        return destino_id;
+    }
+
+    public void setDestino_id(DestinoModel destino_id) {
+        this.destino_id = destino_id;
     }
 }
 

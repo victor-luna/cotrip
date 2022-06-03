@@ -1,7 +1,11 @@
 package com.api.cotrip.dtos;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.validation.constraints.NotBlank;
 
+@JsonIgnoreProperties
 public class DestinoDto {
 
     @NotBlank
@@ -18,6 +22,7 @@ public class DestinoDto {
     private String valorArrecadado;
     @NotBlank
     private String opcoesDeDestino;
+
 
     public String getOrigem() {
         return origem;

@@ -1,15 +1,17 @@
 package com.api.cotrip.models;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_COTRIP_USUARIO")
 public class UserModel implements Serializable {
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -30,6 +32,9 @@ public class UserModel implements Serializable {
     private String cidade;
     @Column(nullable = false)
     private LocalDateTime dataDeRegistro;
+
+    @OneToMany(mappedBy = "destino_id", cascade = CascadeType.ALL)
+    private List<DestinoModel> destinos = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -101,5 +106,13 @@ public class UserModel implements Serializable {
 
     public void setDataDeRegistro(LocalDateTime dataDeRegistro) {
         this.dataDeRegistro = dataDeRegistro;
+    }
+
+    public List<DestinoModel> getDestinos() {
+        return destinos;
+    }
+
+    public void setDestinos(List<DestinoModel> destinos) {
+        this.destinos = destinos;
     }
 }

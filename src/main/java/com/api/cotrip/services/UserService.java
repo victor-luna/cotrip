@@ -22,6 +22,7 @@ public class UserService {
         return userRepository.save(userModel);
     }
 
+
     public boolean existsByCPF(String CPF) {
         return userRepository.existsByCPF(CPF);
     }
@@ -34,10 +35,17 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+
     @Transactional
     public void delete(UserModel userModel) {
         userRepository.delete(userModel);
     }
 
 
+    @Transactional
+    public UserModel saveAndFlush(UserModel userModel) {
+        return userRepository.saveAndFlush(userModel);
+    }
 }
+
+

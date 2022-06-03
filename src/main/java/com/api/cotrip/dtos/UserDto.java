@@ -1,8 +1,19 @@
 package com.api.cotrip.dtos;
 
+import com.api.cotrip.models.DestinoModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1
+import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
+
 
 public class UserDto {
+
+
 
     @NotBlank
     private String CPF;
@@ -18,6 +29,21 @@ public class UserDto {
     private String estado;
     @NotBlank
     private String cidade;
+
+
+    private List<DestinoModel> destinos;
+
+
+
+
+    public List<DestinoModel> getDestinos() {
+        return destinos;
+    }
+
+    public void setDestinos(List<DestinoModel> destinos) {
+        this.destinos = destinos;
+    }
+
 
     public String getCPF() {
         return CPF;
