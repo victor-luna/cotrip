@@ -40,7 +40,6 @@ public class DestinoController{
 
         var destinoModel = new DestinoModel();
         BeanUtils.copyProperties(destinoDto, destinoModel); // converte o DTO em Model.
-        destinoModel.setDataDeRegistro(LocalDateTime.now(ZoneId.of("UTC")));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(destinoService.save(destinoModel));
     }
@@ -78,7 +77,6 @@ public class DestinoController{
         }
         var destinoModel = new DestinoModel();
         BeanUtils.copyProperties(destinoDto, destinoModel);
-        destinoModel.setDataDeRegistro(destinoModelOptional.get().getDataDeRegistro());
         return ResponseEntity.status(HttpStatus.OK).body(destinoService.save(destinoModel));
     }
 

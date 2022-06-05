@@ -1,6 +1,7 @@
 package com.api.cotrip.dtos;
 
 
+import com.api.cotrip.models.DestinoModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.validation.constraints.NotBlank;
@@ -23,6 +24,15 @@ public class DestinoDto {
     @NotBlank
     private String opcoesDeDestino;
 
+    private DestinoModel destino_id;
+
+    public DestinoModel getDestino_id() {
+        return destino_id;
+    }
+
+    public void setDestino_id(DestinoModel destino_id) {
+        this.destino_id = destino_id;
+    }
 
     public String getOrigem() {
         return origem;

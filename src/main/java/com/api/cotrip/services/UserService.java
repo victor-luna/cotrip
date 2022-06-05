@@ -31,7 +31,7 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public Optional<UserModel> findById(UUID id) {
+    public Optional<UserModel> findById(String id) {
         return userRepository.findById(id);
     }
 

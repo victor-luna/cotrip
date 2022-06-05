@@ -1,6 +1,9 @@
 package com.api.cotrip.models;
 
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,8 +15,10 @@ public class DestinoModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id")
+    @Type(type="uuid-char")
     private UUID id;
     @Column(nullable = false, length = 100)
     private String origem;
@@ -29,10 +34,6 @@ public class DestinoModel implements Serializable{
     private String valorArrecadado;
     @Column(nullable = false, length = 40)
     private String opcoesDeDestino;
-    @Column(nullable = false)
-    private LocalDateTime dataDeRegistro;
-
-
 
     @ManyToOne
     private DestinoModel destino_id;
@@ -99,14 +100,6 @@ public class DestinoModel implements Serializable{
 
     public void setOpcoesDeDestino(String opcoesDeDestino) {
         this.opcoesDeDestino = opcoesDeDestino;
-    }
-
-    public LocalDateTime getDataDeRegistro() {
-        return dataDeRegistro;
-    }
-
-    public void setDataDeRegistro(LocalDateTime dataDeRegistro) {
-        this.dataDeRegistro = dataDeRegistro;
     }
 
     public DestinoModel getDestino_id() {

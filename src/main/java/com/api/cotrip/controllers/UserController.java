@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneCotripUser(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> getOneCotripUser(@PathVariable(value = "id") String id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCotripUser(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> deleteCotripUser(@PathVariable(value = "id") String id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
@@ -97,7 +97,7 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateCotripUser(@PathVariable(value = "id") UUID id,
+    public ResponseEntity<Object> updateCotripUser(@PathVariable(value = "id") String id,
                                                            @RequestBody @Valid UserDto userDto, @RequestBody @Valid DestinoDto destinoDto){
 
 
@@ -111,7 +111,7 @@ public class UserController {
 
 
         // UPDATE DO DESTINO
-        Optional<DestinoModel> destinoModelOptional = destinoService.findById(id);
+        Optional<DestinoModel> destinoModelOptional = destinoService.findById(UUID.fromString(id));
         if (!destinoModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Destino não encontrado.");
         }

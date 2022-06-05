@@ -1,6 +1,9 @@
 package com.api.cotrip.models;
 
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,9 +15,12 @@ import java.util.UUID;
 @Table(name = "TB_COTRIP_USUARIO")
 public class UserModel implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id")
+    @Type(type="uuid-char")
     private UUID id;
     @Column(nullable = false, unique = true, length = 16)
     private String CPF;
