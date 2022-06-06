@@ -13,8 +13,14 @@ import java.util.UUID;
 @Service
 public class UserService {
     final UserRepository userRepository;
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Transactional
+    public UserModel saveAndFlush(UserModel userModel) {
+        return userRepository.saveAndFlush(userModel);
     }
 
     @Transactional
@@ -31,7 +37,7 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public Optional<UserModel> findById(String id) {
+    public Optional<UserModel> findById(UUID id) {
         return userRepository.findById(id);
     }
 
@@ -41,11 +47,4 @@ public class UserService {
         userRepository.delete(userModel);
     }
 
-
-    @Transactional
-    public UserModel saveAndFlush(UserModel userModel) {
-        return userRepository.saveAndFlush(userModel);
-    }
 }
-
-

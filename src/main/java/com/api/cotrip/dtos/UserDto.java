@@ -13,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
 
 public class UserDto {
 
-
-
     @NotBlank
     private String CPF;
     @NotBlank
@@ -32,9 +30,6 @@ public class UserDto {
 
 
     private List<DestinoModel> destinos;
-
-
-
 
     public List<DestinoModel> getDestinos() {
         return destinos;

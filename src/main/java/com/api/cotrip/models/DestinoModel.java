@@ -1,12 +1,14 @@
 package com.api.cotrip.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Entity
@@ -34,9 +36,34 @@ public class DestinoModel implements Serializable{
     private String valorArrecadado;
     @Column(nullable = false, length = 40)
     private String opcoesDeDestino;
+    @Column(nullable = false)
+    private LocalDateTime dataDeRegistro;
 
+    @JsonIgnore
     @ManyToOne
-    private DestinoModel destino_id;
+    @JoinColumn(name = "destino_id")
+    private UserModel user;
+
+    @PrePersist
+    public void onPrepersist() {
+        this.dataDeRegistro = LocalDateTime.now(ZoneId.of("UTC"));
+    }
+
+    public LocalDateTime getDataDeRegistro() {
+        return dataDeRegistro;
+    }
+
+    public void setDataDeRegistro(LocalDateTime dataDeRegistro) {
+        this.dataDeRegistro = dataDeRegistro;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+    }
 
     public UUID getId() {
         return id;
@@ -102,13 +129,6 @@ public class DestinoModel implements Serializable{
         this.opcoesDeDestino = opcoesDeDestino;
     }
 
-    public DestinoModel getDestino_id() {
-        return destino_id;
-    }
-
-    public void setDestino_id(DestinoModel destino_id) {
-        this.destino_id = destino_id;
-    }
 }
 
 

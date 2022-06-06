@@ -22,7 +22,7 @@ public class UserModel implements Serializable {
     @Column(name = "id")
     @Type(type="uuid-char")
     private UUID id;
-    @Column(nullable = false, unique = true, length = 16)
+    @Column(nullable = false, length = 16)
     private String CPF;
     @Column(nullable = false, length = 120)
     private String name;
@@ -39,7 +39,7 @@ public class UserModel implements Serializable {
     @Column(nullable = false)
     private LocalDateTime dataDeRegistro;
 
-    @OneToMany(mappedBy = "destino_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<DestinoModel> destinos = new ArrayList<>();
 
     public UUID getId() {

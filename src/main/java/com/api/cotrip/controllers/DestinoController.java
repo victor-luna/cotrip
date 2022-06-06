@@ -17,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -76,6 +74,12 @@ public class DestinoController{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Destino não encontrado.");
         }
         var destinoModel = new DestinoModel();
+        var userModel = new UserModel();
+        userModel.getDestinos().stream().forEach(destino -> {
+            destino.setUser(userModel);
+        });
+
+
         BeanUtils.copyProperties(destinoDto, destinoModel);
         return ResponseEntity.status(HttpStatus.OK).body(destinoService.save(destinoModel));
     }
