@@ -1,14 +1,12 @@
 package com.api.cotrip.controllers;
 
-import com.api.cotrip.dtos.DestinoDto;
 import com.api.cotrip.dtos.UserDto;
-import com.api.cotrip.models.DestinoModel;
 import com.api.cotrip.models.UserModel;
 import com.api.cotrip.services.DestinoService;
 import com.api.cotrip.services.UserService;
 import org.springframework.beans.BeanUtils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,8 +37,6 @@ public class UserController {
         this.destinoService = destinoService;
     }
 
-
-
     @PostMapping
     public ResponseEntity<Object> saveCotripUser(@RequestBody @Valid UserDto userDto) {
 
@@ -51,19 +47,21 @@ public class UserController {
         var userModel = new UserModel();
 
         BeanUtils.copyProperties(userDto, userModel); // converte o DTO em Model.
+        userModel.getDestinos().stream().forEach(destino -> {
+            destino.setUser(userModel);
+        });
+
         userModel.setDataDeRegistro(LocalDateTime.now(ZoneId.of("UTC")));
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveAndFlush(userModel));
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserModel>> getAllCotripUsers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
+    public ResponseEntity<Page<UserModel>> getAllCotripUsers(@PageableDefault(page = 0, size = 10, sort = "dataDeRegistro", direction = Sort.Direction.DESC) Pageable pageable){
+            return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneCotripUser(@PathVariable(value = "id") String id){
+    public ResponseEntity<Object> getOneCotripUser(@PathVariable(value = "id") UUID id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
@@ -71,8 +69,27 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateCotripUser(@PathVariable(value = "id") UUID id,
+                                                   @RequestBody @Valid UserDto userDto){
+        Optional<UserModel> userModelOptional = userService.findById(id);
+        if (!userModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        }
+
+        var userModel = new UserModel();
+        BeanUtils.copyProperties(userDto, userModel);
+
+        userModel.getDestinos().stream().forEach(destino -> {
+            destino.setUser(userModel);
+        });
+
+        userModel.setDataDeRegistro(LocalDateTime.now(ZoneId.of("UTC")));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userModel));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCotripUser(@PathVariable(value = "id") String id){
+    public ResponseEntity<Object> deleteCotripUser(@PathVariable(value = "id") UUID id){
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
@@ -80,53 +97,6 @@ public class UserController {
         userService.delete(userModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso.");
     }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Object> ser(@PathVariable(value = "id") UUID id,
-//                                                    @RequestBody @Valid UserDto userDto){
-//
-//        Optional<UserModel> userModelOptional = userService.findById(id);
-//        if (!userModelOptional.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
-//        }
-//        var userModel = new UserModel();
-//        BeanUtils.copyProperties(userDto, userModel);
-//        userModel.setDataDeRegistro(userModelOptional.get().getDataDeRegistro());
-//        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userModel));
-//    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateCotripUser(@PathVariable(value = "id") String id,
-                                                           @RequestBody @Valid UserDto userDto, @RequestBody @Valid DestinoDto destinoDto){
-
-
-        // UPDATE DO USUÁRIO
-        Optional<UserModel> userModelOptional = userService.findById(id);
-        if (!userModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
-        }
-        var userModel = new UserModel();
-        BeanUtils.copyProperties(userDto, userModel);
-
-
-        // UPDATE DO DESTINO
-        Optional<DestinoModel> destinoModelOptional = destinoService.findById(UUID.fromString(id));
-        if (!destinoModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Destino não encontrado.");
-        }
-        var destinoModel = new DestinoModel();
-
-
-        BeanUtils.copyProperties(destinoDto, destinoModel);
-        BeanUtils.copyProperties(userDto, userModel);
-
-
-        userModel.getDestinos().add(destinoModel);
-        userModel.setDataDeRegistro(userModelOptional.get().getDataDeRegistro());
-        return ResponseEntity.status(HttpStatus.OK).body(userService.saveAndFlush(userModel));
-    }
-
 
 
 }

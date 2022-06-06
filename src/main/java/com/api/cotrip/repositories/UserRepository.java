@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserModel, String> {
+public interface UserRepository extends JpaRepository<UserModel, UUID> {
 
     boolean existsByCPF(String CPF);
 }
